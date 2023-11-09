@@ -1,0 +1,25 @@
+#!/bin/bash
+set -ex
+
+VERSION=`git describe --always`
+export VERSION
+
+PROJECT_NAME=cords-backend
+
+j2 .env.j2 > .env
+j2 keycloak.pub.j2 > keycloak.pub
+docker compose -p $PROJECT_NAME-builder run -u $(id -u) web composer install
+docker compose -p $PROJECT_NAME-builder run -u $(id -u) web composer dump-env prod
+docker compose -p $PROJECT_NAME-builder run -u $(id -u) web /bin/bash -c "cd ./crawler && npm install"
+
+rsync \
+  -a . \
+  --exclude=var \
+  --exclude=/docker-compose.override.yml \
+  --delete \
+  $1
+
+cd $1
+docker compose -p $PROJECT_NAME-backend-builder run -u $(id -u) web composer dump-env prod
+docker compose exec -T -u $(id -u) web ./bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec -T -u $(id -u) web ./bin/console cache:clear && sudo chmod -R 777 var

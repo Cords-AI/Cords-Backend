@@ -1,0 +1,32 @@
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+.idea/
+.env*
+!.env.j2
+docker-compose.override.yml
+.php-cs-fixer.cache
+keycloak.pub
+*.sql
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+/data/*
+!/data/restore
+!/data/snapshot
+
+/src/Features/Import
+/src/Features/Info/GeoLite2-City_20230221/

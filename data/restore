@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SOURCE="${1:-./data/versions/snapshot}"
+
+docker compose down || true
+
+sudo rsync -a \
+  $SOURCE/ ./data/current/ \
+  --exclude uploads \
+  --delete
+
+docker compose up -d

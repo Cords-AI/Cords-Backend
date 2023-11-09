@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [[ $DEV != true ]]; then
+  echo "Cannot run in production."
+  exit 1
+fi
+
+./bin/console doctrine:database:drop -f && ./bin/console doctrine:database:create && ./bin/console doctrine:migrations:migrate --no-interaction

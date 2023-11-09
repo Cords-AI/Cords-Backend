@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -ex
+DB=cords
+HOST=data-service-dev.cords.dev
+mysql -u root -e "DROP DATABASE IF EXISTS $DB; CREATE DATABASE $DB;"
+ssh $HOST "mysqldump --single-transaction=TRUE $DB" | mysql $DB

@@ -1,0 +1,17 @@
+name: Crawl Links Stage
+
+on:
+  workflow_dispatch:
+
+jobs:
+  import:
+    runs-on: internal-stage
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Crawl Links
+        run: |
+          cd /home/ubuntu/sites/data-service
+          docker compose exec -u $(id -u) web ./bin/console app:update:links

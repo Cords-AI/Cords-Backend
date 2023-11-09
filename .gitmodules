@@ -1,0 +1,6 @@
+[submodule "tests/fixtures"]
+	path = tests/fixtures
+	url = ../data-partner-fixtures.git
+[submodule "lib/TrainingData"]
+	path = lib/TrainingData
+	url = git@github.com:Cords-Connect/Training-Data.git

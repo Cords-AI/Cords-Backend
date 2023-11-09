@@ -1,0 +1,39 @@
+name: Import Stage
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 7 * * *
+
+jobs:
+  import:
+    runs-on: internal-stage
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Import Mentor Connector Programs
+        run: |
+          cd /home/ubuntu/sites/data-service
+          docker compose exec -u $(id -u) web ./bin/console app:import:mentor
+
+      - name: Import Prosper Benefits
+        run: |
+          cd /home/ubuntu/sites/data-service
+          docker compose exec -u $(id -u) web ./bin/console app:import:prosper
+
+      - name: Import Magnet Postings
+        run: |
+          cd /home/ubuntu/sites/data-service
+          docker compose exec -u $(id -u) web ./bin/console app:import:magnet
+
+      - name: Import 211 Resources
+        run: |
+          cd /home/ubuntu/sites/data-service
+          docker compose exec -u $(id -u) web ./bin/console app:import:211
+
+      - name: Compute Canonical Records (Exclude Duplicates)
+        run: |
+          cd /home/ubuntu/sites/data-service
+          docker compose exec -u $(id -u) web ./bin/console app:compute-canonical

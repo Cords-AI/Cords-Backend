@@ -1,0 +1,6 @@
+#!/bin/bash
+
+sudo rsync -a \
+  ./data/current/ ./data/versions/snapshot/ \
+  --exclude uploads \
+  --delete

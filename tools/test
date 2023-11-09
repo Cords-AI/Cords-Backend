@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+DOCKER_USER=$(id -u)
+if [ $DOCKER_USER != 1000 ]; then
+  DOCKER_USER=0;
+fi
+
+# phpunit
+docker compose run -u $DOCKER_USER -e APP_ENV=test web ./tools/reset
+docker compose run -u $DOCKER_USER web ./bin/phpunit --testdox
+
+# code style
+docker compose run -u $DOCKER_USER web ./vendor/bin/php-cs-fixer fix --dry-run
+
+# static analyzer
+docker compose run -u $DOCKER_USER web ./vendor/bin/phpstan
+
+echo "
+✅  Tests Passed.
+"

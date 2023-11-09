@@ -1,0 +1,23 @@
+version: '3'
+
+networks:
+  default:
+    name: traefik
+    external: true
+  database:
+    external: true
+
+services:
+  web:
+    hostname: $HOSTNAME
+    networks:
+      - default
+      - database
+    volumes:
+      - ./docker/20-xdebug.ini:/etc/php/8.1/apache2/conf.d/20-xdebug.ini
+      - ./docker/20-xdebug.ini:/etc/php/8.1/cli/conf.d/20-xdebug.ini
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.$ROUTERNAME.rule=Host(`$HOSTNAME`)"
+      - "traefik.http.routers.$ROUTERNAME.tls=true"
+      - "traefik.http.routers.$ROUTERNAME.entrypoints=https"

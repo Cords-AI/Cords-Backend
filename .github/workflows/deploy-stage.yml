@@ -1,0 +1,37 @@
+name: Deploy Stage
+
+on:
+  push:
+    branches:
+      - release/stage
+
+jobs:
+  deploy:
+    runs-on: z1d-dev
+    env:
+      APP_ENV: prod
+      HOSTNAME: backend.z1d.cords.dev
+      ROUTERNAME: data-service
+      TWO_ELEVEN_URL: https://data.211support.org
+      KEYCLOAK_PUBLIC_KEY: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvWxVBZ+mVB8Hyza/X6M2zg+SGFtAwJOGq3jYPP79jY1tihV92iMdkOju5DXGldeUT5D6ythWlYsPqiuCDemEkezabgQHy2fhql/d+ILCHPAp+njdqmhebUEeh34OEkEM0lhbmIO5xFkKr7Kc1woO/ndC/w4xUR7FkjXid7t+S9i+IKzpE+hVPqedx0LnIN6dgHFAghNPBG1yKjlPOvU3Gc/IxK+EIeeQoGTrkSNbOoXLGyF9ywzrLVux8yQG+FugwOQ6gNgYHsGIu9VsU/e+z7M6q3Ky++pwOqoy1z7AAQWu1KZkaVjZjQUqhlIMuOeC61KGYiul7OXVpHll22NybQIDAQAB
+      CORDS_SEARCH_URL: https://demo.cordsconnect.ca
+      MENTOR_CONNECTOR_API_URL: https://server.connect.mentoringcanada.ca
+      PROSPER_BENEFITS_URL: https://cdn.contentful.com/spaces/t0xvvw9htcnr/environments/master/entries
+      MAGNET_URL: https://magnet.whoplusyou.com/api/v2/job-search
+
+      # Local Services
+      CHROMA_SERVICE_URL: http://chroma-service
+
+      # Secrets.
+      APP_SECRET: ${{ secrets.APP_SECRET }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      TWO_ELEVEN_API_KEY: ${{ secrets.TWO_ELEVEN_API_KEY }}
+      BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+      PROSPER_ACCESS_TOKEN: ${{ secrets.PROSPER_ACCESS_TOKEN }}
+      MAGNET_TOKEN: ${{ secrets.MAGNET_TOKEN }}
+      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: ./tools/deploy /nvme1/docker/backend

@@ -1,0 +1,11 @@
+security:
+  password_hashers:
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: plaintext
+  firewalls:
+    admin:
+      stateless: true
+      pattern: ^/admin/.*$
+      custom_authenticators:
+        - App\Authenticator
+  access_control:
+    - { path: ^admin/, roles: ROLE_ADMIN }
